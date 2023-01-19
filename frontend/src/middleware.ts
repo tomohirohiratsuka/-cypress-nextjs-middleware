@@ -13,7 +13,8 @@ export async function middleware(request: NextRequest) {
   ) {
     return response;
   }
-  const authenticated = await AuthenticatedMiddleware();
+  const authenticated = await AuthenticatedMiddleware(request);
+  console.log(authenticated)
   if (!authenticated) {
     return NextResponse.redirect('http://localhost:3000/');
   }

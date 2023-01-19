@@ -3,11 +3,15 @@ import {useRouter} from 'next/router'
 
 import Layout from "@layouts/Layout";
 import {NextPageWithLayout} from "@pages/_app";
+import Repository from "@repositories/Repository";
 
 
 const Home: NextPageWithLayout = () => {
     const router = useRouter()
-    const handleClick = () => router.push('/protected')
+    const handleClick = async () => {
+        await Repository.get('set-cookie')
+        router.push('/protected')
+    }
     return(
         <Container>
             <Center>
