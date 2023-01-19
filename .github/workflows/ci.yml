@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - "**"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ["16.14.2"]
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v3
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ matrix.node }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.node }}
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Frontend install dependency
+        run: |
+          cp .env.example .env
+          npm i
+        working-directory: frontend
+      - name: Backend install dependency
+        run: |
+          npm i
+        working-directory: backend
+      - name: Cypress Setup
+        uses: cypress-io/github-action@v5
+        with:
+          working-directory: e2e
+          browser: chrome
+          build: |
+            npm run --prefix ../frontend build
+            npm run --prefix ../backend build
+          start: |
+            npm run --prefix ../frontend start
+            npm run --prefix ../backend start
+          wait-on: "http://localhost:3000, http://localhost:3001/api/health-check"
+          wait-on-timeout: 30
+          headed: true
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: Cypress E2E Videos
+          path: |
+            e2e/cypress/videos
+            e2e/cypress/screenshots
