@@ -32,18 +32,21 @@ jobs:
         run: |
           cp .env.example .env
           npm i
-          npm run build
+          npm run lint
         working-directory: frontend
       - name: Backend install dependency
         run: |
           npm i
-          npm run build
+          npm run lint
         working-directory: backend
       - name: Cypress Setup
         uses: cypress-io/github-action@v5
         with:
           working-directory: e2e
           browser: chrome
+          build: |
+            npm run --prefix ../frontend build
+            npm run --prefix ../backend build
           start: |
             npm run --prefix ../frontend start
             npm run --prefix ../backend start

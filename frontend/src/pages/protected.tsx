@@ -1,15 +1,11 @@
-import {NextPageWithLayout} from "@pages/_app";
 import Layout from "@layouts/Layout";
+import {NextPageWithLayout} from "@pages/_app";
 
-const Protected: NextPageWithLayout = () => {
-    return<div>this is protected.</div>
-}
-Protected.getLayout = (page) => {
-    return(
+const Protected: NextPageWithLayout = () => <div>this is protected.</div>
+Protected.getLayout = (page) => (
         <Layout>
             {page}
         </Layout>
     )
-}
 
 export default Protected

@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "eslint": "next lint",
-    "eslint:fix": "next lint --fix",
+    "lint": "next lint",
     "format": "prettier --write ./**/*.{ts,js,json,*rc}"
   },
   "dependencies": {
