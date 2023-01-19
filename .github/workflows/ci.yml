@@ -28,23 +28,22 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
-      - name: Frontend install dependency
+      - name: Frontend Setup
         run: |
           cp .env.example .env
           npm i
+          npm run build
         working-directory: frontend
       - name: Backend install dependency
         run: |
           npm i
+          npm run build
         working-directory: backend
       - name: Cypress Setup
         uses: cypress-io/github-action@v5
         with:
           working-directory: e2e
           browser: chrome
-          build: |
-            npm run --prefix ../frontend build
-            npm run --prefix ../backend build
           start: |
             npm run --prefix ../frontend start
             npm run --prefix ../backend start
